@@ -1,6 +1,6 @@
 # Movie Night Picker
 
-A Flask web app that helps you pick a movie to watch. Filter by genre and minimum rating — no algorithm, no account, no friction.
+A Flask web app that helps you pick a movie to watch. Filter by genre and minimum rating.
 
 Powered by the [TMDB API](https://www.themoviedb.org/).
 
