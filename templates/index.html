@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Movie Night Picker</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+</head>
+<body>
+
+<header>
+  <span class="logo">🎬 Movie Night Picker</span>
+  <span class="tagline">Stop scrolling. Start watching.</span>
+</header>
+
+<div class="filter-bar">
+  <form class="filter-form" method="GET" action="/">
+
+    <div class="filter-group">
+      <label for="genre">Genre</label>
+      <select id="genre" name="genre">
+        <option value="">All Genres</option>
+        {% for gid, gname in genres.items() | sort(attribute='1') %}
+          <option value="{{ gid }}" {% if selected_genre_id == gid %}selected{% endif %}>
+            {{ gname }}
+          </option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <label for="min_rating">Min Rating</label>
+      <div class="slider-wrapper">
+        <input
+          type="range"
+          id="min_rating"
+          name="min_rating"
+          min="0" max="9" step="0.5"
+          value="{{ min_rating }}"
+        />
+        <span class="rating-badge" id="rating-label">{{ "%.1f"|format(min_rating) }}</span>
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Search</button>
+    <a href="/" class="btn btn-secondary">Reset</a>
+
+    {% if movies %}
+      <button type="button" id="random-btn" class="btn btn-random">🎲 Random Pick</button>
+    {% endif %}
+
+  </form>
+</div>
+
+<main>
+
+  {% if api_key_missing %}
+    <div class="error-banner">
+      ⚠️ <strong>API key not set.</strong> Add your keys to <code>keys.py</code>.
+    </div>
+  {% endif %}
+
+  <div class="results-header">
+    <h2>
+      {% if selected_genre_id %}
+        <span>{{ selected_genre_name }}</span> Movies
+      {% else %}
+        All Movies
+      {% endif %}
+      {% if min_rating > 0 %}
+        &nbsp;— Rated {{ "%.1f"|format(min_rating) }}+
+      {% endif %}
+    </h2>
+    {% if movies %}
+      <span style="color: var(--muted); font-size: 0.9rem;">Page {{ page }} of {{ total_pages }}</span>
+    {% endif %}
+  </div>
+
+  {% if movies %}
+    <div class="movie-grid">
+      {% for movie in movies %}
+        <div class="movie-card">
+          <div class="poster-wrap">
+            <img
+              src="{{ movie.poster if movie.poster else placeholder }}"
+              alt="Poster for {{ movie.title }}"
+              loading="lazy"
+              onerror="this.src='{{ placeholder }}'"
+            />
+            <span class="rating-chip">⭐ {{ movie.rating }}</span>
+          </div>
+          <div class="card-body">
+            <div class="card-title">{{ movie.title }}</div>
+            <div class="card-year">{{ movie.year }}</div>
+            <p class="card-overview">{{ movie.overview }}</p>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+
+    <div class="pagination">
+      {% if page > 1 %}
+        <a href="?genre={{ selected_genre_id or '' }}&min_rating={{ min_rating }}&page={{ page - 1 }}" class="btn btn-secondary">← Prev</a>
+      {% endif %}
+      <span class="page-info">Page {{ page }} / {{ total_pages }}</span>
+      {% if page < total_pages %}
+        <a href="?genre={{ selected_genre_id or '' }}&min_rating={{ min_rating }}&page={{ page + 1 }}" class="btn btn-primary">Next →</a>
+      {% endif %}
+    </div>
+
+  {% else %}
+    <div class="empty-state">
+      <div class="icon">🎞️</div>
+      <p>No movies found. Try adjusting your filters.</p>
+    </div>
+  {% endif %}
+
+</main>
+
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
