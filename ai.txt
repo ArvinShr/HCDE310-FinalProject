@@ -1,0 +1,4 @@
+I used Claude to set up an initial strucute, essentially scaffolding it.
+
+I set up the development environment, the TMDB API documentation, 
+app testing, and all other project configuration.

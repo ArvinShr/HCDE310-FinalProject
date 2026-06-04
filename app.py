@@ -50,7 +50,8 @@ def get_movies(genre_id=None, min_rating=0, page=1):
         resp = requests.get(url, headers=auth["headers"], params=params, timeout=10)
         resp.raise_for_status()
         data = resp.json()
-    except requests.RequestException:
+    except requests.RequestException as e:
+        print("API error:", e)
         return [], 0
 
     movies = []
