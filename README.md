@@ -16,23 +16,17 @@ Powered by the [TMDB API](https://www.themoviedb.org/).
 
 3. Install dependencies:
    ```
-   python -m pip install flask requests python-dotenv
+   python -m pip install flask requests
    ```
 
 4. Get a free TMDB API key at [themoviedb.org/settings/api](https://www.themoviedb.org/settings/api)
 
-5. Create a `.env` file in the project root with:
-   ```
-   TMDB_API_KEY=your_key_here
-   TMDB_READ_ACCESS_TOKEN=your_token_here
-   FLASK_SECRET_KEY=any_random_string
-   ```
 
-6. Run the app:
+5. Run the app:
    ```
    python app.py
    ```
-7. Open your browser to `http://127.0.0.1:5000`
+6. Open your browser to `http://127.0.0.1:5000`
 
 ## Features
 
